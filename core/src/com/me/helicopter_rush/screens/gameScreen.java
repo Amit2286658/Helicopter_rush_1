@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.helicopter_rush.constants;
@@ -19,7 +20,6 @@ public class gameScreen extends screen {
     private helicopter_rush rush;
     private helicopter helicop;
     private explosion exp;
-    private Texture bg;
     private Array<obstacle> rocks = new Array<obstacle>();
     private Array<ground> grounds = new Array<ground>();
     private Array<ceiling> ceilings = new Array<ceiling>();
@@ -32,11 +32,17 @@ public class gameScreen extends screen {
 
     private OrthographicCamera newCam;
 
+    private ShapeRenderer shapeRenderer;
+
     public gameScreen(helicopter_rush rush) {
         super(rush.getBatch(), true);
         this.rush = rush;
     }
 
+    @Deprecated
+    /*
+    * never used
+    */
     enum gameState{
         READY_STATE, OVER_STATE, PLAYING_STATE
     }
@@ -74,6 +80,7 @@ public class gameScreen extends screen {
         newCam.setToOrtho(false, constants.GAME_WIDTH, constants.GAME_HEIGHT);
         newCam.update();
         Gdx.input.setInputProcessor(this);
+        shapeRenderer = new ShapeRenderer();
     }
 
     @Override
@@ -159,20 +166,20 @@ public class gameScreen extends screen {
         for (int i = 0; i < rocks.size; i++){
             batch.draw(rocks.get(i).getTexture(), rocks.get(i).getPosition().x, rocks.get(i).getPosition().y,
                     constants.OBSTACLE_WIDTH, constants.OBSTACLE_HEIGHT);
-            //rocks.get(i).drawShape(getGameCamera(), rush.getBatch());
+            //rocks.get(i).drawShape(getGameCamera(), shapeRenderer, batch);
         }
         for (int i = 0; i < grounds.size; i++){
             batch.draw(grounds.get(i).getTexture(), grounds.get(i).getPosition().x, grounds.get(i).getPosition().y,
                     constants.GROUND_WIDTH, constants.GROUND_HEIGHT);
         }
-        for (int i = 0; i < grounds.size; i++){
+        for (int i = 0; i < ceilings.size; i++){
             batch.draw(ceilings.get(i).getTexture(), ceilings.get(i).getPosition().x, ceilings.get(i).getPosition().y,
                     constants.GROUND_WIDTH, constants.GROUND_HEIGHT);
         }
         if (!isGameOver) {
             batch.draw(helicop.getTexture(), helicop.getPosition().x, helicop.getPosition().y,
                     constants.HELICOPTER_WIDTH, constants.HELICOPTER_HEIGHT);
-            //helicop.drawShape(getGameCamera(), rush.getBatch());
+            //helicop.drawShape(getGameCamera(), shapeRenderer, batch);
         }else {
             batch.draw(exp.getTexture(), exp.getPosition().x, exp.getPosition().y,
                     constants.HELICOPTER_WIDTH, constants.HELICOPTER_HEIGHT);
@@ -197,11 +204,9 @@ public class gameScreen extends screen {
     @Override
     public void dispose() {
         super.dispose();
-        //rush.dispose();
-        //batch.dispose();
-        //bg.dispose();
         helicop.dispose();
         explosion.dispose();
+        shapeRenderer.dispose();
         for (int i = 0; i < rocks.size; i++){
             rocks.get(i).dispose();
         }

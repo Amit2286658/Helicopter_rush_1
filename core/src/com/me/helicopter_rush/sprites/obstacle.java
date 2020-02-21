@@ -16,7 +16,7 @@ public class obstacle {
 
     private Vector2 position = new Vector2();
     private TextureRegion image;
-    boolean counted;
+    private boolean counted;
     private Random rand = new Random();
     private boolean isDown = false;
     private Rectangle bounds;
@@ -27,16 +27,13 @@ public class obstacle {
         isDown = rand.nextBoolean();
         if (isDown){
             this.position.y = constants.VIEWPORT_HEIGHT - constants.OBSTACLE_HEIGHT;
-            bounds = new Rectangle(this.position.x + 16, this.position.y + constants.OBSTACLE_HEIGHT_OFFSET
+            bounds = new Rectangle(this.position.x + 18, this.position.y + constants.OBSTACLE_HEIGHT_OFFSET
                     , 20, constants.OBSTACLE_HEIGHT - constants.OBSTACLE_HEIGHT_OFFSET);
         }else{
             this.position.y = constants.ORIGIN.y;
             bounds = new Rectangle(this.position.x + 18, this.position.y, 20,
                     constants.OBSTACLE_HEIGHT - constants.OBSTACLE_HEIGHT_OFFSET);
         }
-
-
-
     }
 
     public TextureRegion getTexture() {
@@ -49,15 +46,15 @@ public class obstacle {
         }
     }
 
-    /*public void drawShape(OrthographicCamera cam, SpriteBatch batch){
+    public void drawShape(OrthographicCamera cam, ShapeRenderer renderer, SpriteBatch batch){
         batch.end();
-        shapeRenderer.setProjectionMatrix(cam.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-        shapeRenderer.end();
+        renderer.setProjectionMatrix(cam.combined);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.BLACK);
+        renderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+        renderer.end();
         batch.begin();
-    }*/
+    }
 
     public void dispose(){
         this.image.getTexture().dispose();

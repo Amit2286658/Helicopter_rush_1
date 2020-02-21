@@ -64,15 +64,15 @@ public class helicopter {
         return helicopters.getKeyFrame(delta);
     }
 
-    /*public void drawShape(OrthographicCamera cam, SpriteBatch batch){
+    public void drawShape(OrthographicCamera cam, ShapeRenderer renderer, SpriteBatch batch){
         batch.end();
-        shapeRenderer.setProjectionMatrix(cam.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-        shapeRenderer.end();
+        renderer.setProjectionMatrix(cam.combined);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.BLACK);
+        renderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+        renderer.end();
         batch.begin();
-    }*/
+    }
 
     public Texture getTexture(float delta){
         this.delta += delta;
