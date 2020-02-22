@@ -175,7 +175,7 @@ public class gameScreen extends screen {
         }
         for (int i = 0; i < ceilings.size; i++){
             batch.draw(ceilings.get(i).getTexture(), ceilings.get(i).getPosition().x, ceilings.get(i).getPosition().y,
-                    constants.GROUND_WIDTH, constants.GROUND_HEIGHT);
+                    constants.CEILING_WIDTH, constants.CEILING_HEIGHT);
         }
         if (currentState  != gameState.OVER_STATE) {
             batch.draw(helicop.getTexture(), helicop.getPosition().x, helicop.getPosition().y,
