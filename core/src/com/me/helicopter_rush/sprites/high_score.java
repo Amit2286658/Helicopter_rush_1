@@ -79,20 +79,19 @@ public class high_score {
     }
 
     private void runScoreCheck(int score){
-        boolean newHighScore = false;
         if (!scoreCheckHasRun){
+            high_score = preferences.getInteger(constants.SCORE_PREFERENCE_KEY);
             current_score = score;
             if (high_score < current_score){
                 preferences.putInteger(constants.SCORE_PREFERENCE_KEY, current_score);
                 preferences.flush();
-                newHighScore = true;
-            }
-            highScoreValue.setText(String.format(Locale.getDefault(), "%03d", high_score));
-            if (newHighScore) {
                 highScoreText.setText("NEW HIGH SCORE");
                 highScoreValue.setText(String.format(Locale.getDefault(), "%03d", current_score));
-
+            }else {
+                highScoreText.setText("HIGH SCORE");
+                highScoreValue.setText(String.format(Locale.getDefault(), "%03d", high_score));
             }
+
             currentScoreValue.setText(String.format(Locale.getDefault(), "%03d", current_score));
 
             scoreCheckHasRun = true;
