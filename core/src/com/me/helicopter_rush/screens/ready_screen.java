@@ -13,6 +13,10 @@ import com.me.helicopter_rush.sprites.ceiling;
 import com.me.helicopter_rush.sprites.ground;
 import com.me.helicopter_rush.sprites.helicopter;
 
+@Deprecated
+/*
+* not used anymore
+*/
 public class ready_screen extends screen {
 
     private helicopter_rush rush;
@@ -45,9 +49,11 @@ public class ready_screen extends screen {
             ceilings.add(new ceiling((i * constants.CEILING_WIDTH) - constants.CAMERA_OFFSET));
         }
 
-        getGameCamera().setToOrtho(false, constants.VIEWPORT_WIDTH, constants.VIEWPORT_HEIGHT);
+        //getGameCamera().setToOrtho(false, constants.VIEWPORT_WIDTH, constants.VIEWPORT_HEIGHT);
+        getGameCamera().position.set(getGameViewPort().getWorldWidth()/2, getGameViewPort().getWorldHeight()/2, 0);
         getGameCamera().update();
-        getUiCamera().setToOrtho(false, constants.GAME_WIDTH, constants.GAME_HEIGHT);
+        //getUiCamera().setToOrtho(false, constants.GAME_WIDTH, constants.GAME_HEIGHT);
+        getUiCamera().position.set(getUiViewPort().getWorldWidth()/2, getUiViewPort().getWorldHeight()/2, 0);
         getUiCamera().update();
         newCam = new OrthographicCamera();
         newCam.setToOrtho(false, constants.GAME_WIDTH, constants.GAME_HEIGHT);
@@ -88,7 +94,7 @@ public class ready_screen extends screen {
 
     @Override
     void render(SpriteBatch batch) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(newCam.combined);
@@ -127,6 +133,13 @@ public class ready_screen extends screen {
     @Override
     void hidden() {
         Gdx.input.setInputProcessor(null);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        getGameViewPort().update(width, height);
+        getUiViewPort().update(width, height);
     }
 
     @Override

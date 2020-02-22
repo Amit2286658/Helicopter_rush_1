@@ -25,9 +25,14 @@ public class explosion {
                     new Texture("exp7.png"),
                     new Texture("exp8.png")
             );
-            explosion.setPlayMode(Animation.PlayMode.NORMAL);
             isAnimationLoaded = true;
         }
+    }
+
+    public void reset(){
+        dispose();
+        isAnimationLoaded = false;
+        this.delta = 0;
     }
 
     public void update(float delta){
@@ -35,7 +40,7 @@ public class explosion {
     }
 
     public Texture getTexture(){
-        return explosion.getKeyFrame(this.delta);
+        return explosion.getKeyFrame(this.delta, false);
     }
 
     public Vector2 getPosition(){

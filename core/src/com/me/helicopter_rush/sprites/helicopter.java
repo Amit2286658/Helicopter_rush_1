@@ -25,17 +25,17 @@ public class helicopter {
         velocity = new Vector2(0, 0);
          //texture = new Texture("plane1.png");
          helicopters = new Animation<Texture>(0.05f,
-                 new Texture("plane1.png"),
-                 new Texture("plane2.png"),
-                 new Texture("plane3.png"),
-                 new Texture("plane2.png")
+                 new Texture("helicop1.png"),
+                 new Texture("helicop2.png"),
+                 new Texture("helicop3.png"),
+                 new Texture("helicop2.png")
          );
          helicopters.setPlayMode(Animation.PlayMode.LOOP);
          bounds = new Rectangle(
-                 this.position.x,
-                 this.position.y,
-                 constants.HELICOPTER_WIDTH,
-                 constants.HELICOPTER_HEIGHT
+                 this.position.x + 2,
+                 this.position.y + 2,
+                 constants.HELICOPTER_WIDTH - 4,
+                 constants.HELICOPTER_HEIGHT - 4
          );
     }
 
@@ -83,6 +83,10 @@ public class helicopter {
         this.moveHorizontalOnly = true;
     }
 
+    public void doNotMoveHorizontally(){
+        this.moveHorizontalOnly = false;
+    }
+
     public void update(float delta){
         this.delta += delta;
         if (!moveHorizontalOnly) {
@@ -95,7 +99,7 @@ public class helicopter {
         if (position.y < 0)
             position.y = 0;
 
-        bounds.setPosition(this.position.x, this.position.y);
+        bounds.setPosition(this.position.x + 2, this.position.y + 2);
     }
 
     public void dispose(){
@@ -108,7 +112,7 @@ public class helicopter {
         return bounds;
     }
 
-    public boolean collision(){
+    public boolean groundCollision(){
         return this.position.y <= constants.ORIGIN.y + constants.GROUND_COLLISION_OFFSET ||
                 this.position.y >= constants.VIEWPORT_HEIGHT - constants.GROUND_HEIGHT;
         //return false;

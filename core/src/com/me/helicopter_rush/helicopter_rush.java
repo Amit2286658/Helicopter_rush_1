@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.me.helicopter_rush.screens.gameScreen;
 import com.me.helicopter_rush.screens.titleScreen;
 
 public class helicopter_rush extends Game {

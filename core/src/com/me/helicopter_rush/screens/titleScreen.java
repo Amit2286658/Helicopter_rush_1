@@ -26,7 +26,8 @@ public class titleScreen extends screen {
         background = new Texture("bg_new.png");
 
         Gdx.input.setInputProcessor(this);
-        getUiCamera().setToOrtho(false, constants.GAME_WIDTH, constants.GAME_HEIGHT);
+        //getUiCamera().setToOrtho(false, constants.GAME_WIDTH, constants.GAME_HEIGHT);
+        getUiCamera().position.set(getUiViewPort().getWorldWidth()/2, getUiViewPort().getWorldHeight()/2, 0);
     }
 
     @Override
@@ -57,6 +58,13 @@ public class titleScreen extends screen {
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        getGameViewPort().update(width, height);
+        getUiViewPort().update(width, height);
+    }
+
+    @Override
     public void dispose() {
         super.dispose();
         /*startGame.dispose();
@@ -75,7 +83,7 @@ public class titleScreen extends screen {
                 && screenY >= ((constants.GAME_HEIGHT/2-playbutton.getHeight()/2))
                 && screenY <= (constants.GAME_HEIGHT/2+playbutton.getHeight()/2)){
         }*/
-        rush.setScreen(new ready_screen(
+        rush.setScreen(new gameScreen(
                 rush
         ));
 

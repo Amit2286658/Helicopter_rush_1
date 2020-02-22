@@ -4,6 +4,9 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.me.helicopter_rush.constants;
 
 public abstract class screen extends ScreenAdapter implements InputProcessor {
 
@@ -11,6 +14,8 @@ public abstract class screen extends ScreenAdapter implements InputProcessor {
 
     private OrthographicCamera gameCamera;
     private OrthographicCamera uiCamera;
+    private Viewport gameViewPort;
+    private Viewport uiViewPort;
 
     private SpriteBatch batch;
 
@@ -19,6 +24,9 @@ public abstract class screen extends ScreenAdapter implements InputProcessor {
         this.should_dispose = shouldDispose;
         this.gameCamera = new OrthographicCamera();
         this.uiCamera = new OrthographicCamera();
+        gameViewPort = new FitViewport(constants.VIEWPORT_WIDTH, constants.VIEWPORT_HEIGHT, gameCamera);
+        uiViewPort = new FitViewport(constants.GAME_WIDTH, constants.GAME_HEIGHT, uiCamera);
+
     }
 
     abstract void update(float delta);
@@ -40,12 +48,20 @@ public abstract class screen extends ScreenAdapter implements InputProcessor {
             dispose();
     }
 
-    public OrthographicCamera getGameCamera() {
+    OrthographicCamera getGameCamera() {
         return gameCamera;
     }
 
-    public OrthographicCamera getUiCamera() {
+    OrthographicCamera getUiCamera() {
         return uiCamera;
+    }
+
+    Viewport getGameViewPort() {
+        return gameViewPort;
+    }
+
+    Viewport getUiViewPort() {
+        return uiViewPort;
     }
 
     /**

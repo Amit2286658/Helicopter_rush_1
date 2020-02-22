@@ -14,8 +14,8 @@ public class constants {
     public static final int OBSTACLE_WIDTH = 63;
     public static final int OBSTACLE_HEIGHT = 140;
     public static final int OBSTACLE_HEIGHT_OFFSET = 5;
-    public static final int HELICOPTER_WIDTH = 35;
-    public static final int HELICOPTER_HEIGHT = 29;
+    public static final int HELICOPTER_WIDTH = 40;//35;
+    public static final int HELICOPTER_HEIGHT = 32;//29;
     public static final int HELICOPTER_INITIAL_X = 40;
     public static final int HELICOPTER_INITIAL_Y = 120;
     public static final int TEXT_WIDTH = 350;
@@ -35,6 +35,10 @@ public class constants {
     public static final int BACKGROUND_COUNT = GROUND_COUNT;
     public static final int BACKGROUND_WIDTH = GAME_WIDTH;
     public static final int BACKGROUND_HEIGHT = GAME_HEIGHT;
+    public static final String PREFERENCE = "score_preference";
+    public static final String SCORE_PREFERENCE_KEY = "high_score";
+    public static final int TABLE_WIDTH = 240;
+    public static final int TABLE_HEIGHT = 100;
     private static float time_counter = 0;
     public static float synchronizeCameraPosition;
     public static void accelerateSpeed(float delta){
