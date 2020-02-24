@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.me.helicopter_rush.constants;
 import com.me.helicopter_rush.helicopter_rush;
 import com.me.helicopter_rush.sprites.*;
+import com.me.helicopter_rush.sprites.hud.high_score;
 
 public class gameScreen extends screen {
 
@@ -116,7 +117,7 @@ public class gameScreen extends screen {
             for (obstacle item : rocks) {
                 if (getGameCamera().position.x - getGameCamera().viewportWidth / 2 >
                         item.getPosition().x + constants.OBSTACLE_WIDTH) {
-                    item.update((item.getPosition().x + (/*constants.OBSTACLE_WIDTH + */constants.SPACING) * constants.OBSTACLE_COUNT));
+                    item.update((item.getPosition().x + (constants.SPACING) * constants.OBSTACLE_COUNT));
                     item.setCounted(false);
                 }
                 if (item.getPosition().x < helicop.getPosition().x && !item.getCounted()) {

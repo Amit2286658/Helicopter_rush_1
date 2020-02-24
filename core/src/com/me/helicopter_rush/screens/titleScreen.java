@@ -7,15 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.me.helicopter_rush.constants;
 import com.me.helicopter_rush.helicopter_rush;
+import com.me.helicopter_rush.sprites.hud.about;
 
 public class titleScreen extends screen {
 
-    private Texture backgroundtex, playbuttontex, titletex;
+    private Texture backgroundtex, playbuttontex, titletex, abouttex;
     private helicopter_rush rush;
     Stage uiStage;
+    private about aboutHud;
 
     public titleScreen(helicopter_rush rush) {
         super(rush.getBatch(), true);
@@ -26,8 +27,11 @@ public class titleScreen extends screen {
     public void show() {
         super.show();
         playbuttontex = new Texture("playbutton.png");
-        backgroundtex = new Texture("bg_new.png");
+        backgroundtex = new Texture("bg_forest_edited.png");
         titletex = new Texture("title.png");
+        abouttex = new Texture("about.png");
+
+        aboutHud = new about(rush.getBatch(), getUiViewPort());
 
         //getUiCamera().setToOrtho(false, constants.GAME_WIDTH, constants.GAME_HEIGHT);
         getUiCamera().position.set(getUiViewPort().getWorldWidth()/2, getUiViewPort().getWorldHeight()/2, 0);
@@ -38,13 +42,41 @@ public class titleScreen extends screen {
         title title = new title(titletex, new Vector2(
                 constants.GAME_WIDTH/2-600/2, constants.GAME_HEIGHT-160),
                 600, 100);
+        title.setTouchable(Touchable.enabled);
+        title.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (aboutHud.isShowing()) aboutHud.hide();
+                return true;
+            }
+        });
         background background = new background(backgroundtex,
                 new Vector2(constants.ORIGIN.x, constants.ORIGIN.y), constants.GAME_WIDTH, constants.GAME_HEIGHT);
+        background.setTouchable(Touchable.enabled);
+        background.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (aboutHud.isShowing()) aboutHud.hide();
+                return true;
+            }
+        });
+        aboutActor about = new aboutActor(abouttex, new Vector2(constants.GAME_WIDTH/2 - 130/2,
+                constants.ORIGIN.y + 80), 130, 40);
+        about.setTouchable(Touchable.enabled);
+        about.addListener(new InputListener(){
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (aboutHud.isShowing())
+                    aboutHud.hide();
+                else aboutHud.show();
+                return true;
+            }
+        });
 
         this.uiStage = new Stage(getUiViewPort(), rush.getBatch());
         uiStage.addActor(background);
         uiStage.addActor(title);
         uiStage.addActor(playButton);
+        uiStage.addActor(about);
 
         Gdx.input.setInputProcessor(uiStage);
     }
@@ -60,6 +92,7 @@ public class titleScreen extends screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         uiStage.draw();
+        aboutHud.draw();
     }
 
     @Override
@@ -77,17 +110,11 @@ public class titleScreen extends screen {
     public void dispose() {
         super.dispose();
         uiStage.dispose();
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-        /*if (screenX >= (constants.GAME_WIDTH/2-playbutton.getWidth()/2)
-                && screenX <= (constants.GAME_WIDTH/2+playbutton.getWidth()/2)
-                && screenY >= ((constants.GAME_HEIGHT/2-playbutton.getHeight()/2))
-                && screenY <= (constants.GAME_HEIGHT/2+playbutton.getHeight()/2)){
-        }*/
-        return true;
+        aboutHud.dispose();
+        playbuttontex.dispose();
+        titletex.dispose();
+        abouttex.dispose();
+        backgroundtex.dispose();
     }
 
     static class playButton extends actor{
@@ -99,9 +126,7 @@ public class titleScreen extends screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     rush.setScreen(
-                            new gameScreen(
-                                    rush
-                            )
+                            new gameScreen(rush)
                     );
                     return true;
                 }
@@ -115,6 +140,11 @@ public class titleScreen extends screen {
     }
     static class background extends actor{
         background(Texture tex, Vector2 pos, int width, int height) {
+            super(tex, pos, width, height);
+        }
+    }
+    static class aboutActor extends actor{
+        aboutActor(Texture tex, Vector2 pos, int width, int height) {
             super(tex, pos, width, height);
         }
     }

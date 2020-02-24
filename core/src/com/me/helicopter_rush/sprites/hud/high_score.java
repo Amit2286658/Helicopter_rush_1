@@ -1,4 +1,4 @@
-package com.me.helicopter_rush.sprites;
+package com.me.helicopter_rush.sprites.hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -100,7 +100,6 @@ public class high_score {
 
     public void dispose(){
         stage.dispose();
-
         bg.dispose();
         regionDrawable.getRegion().getTexture().dispose();
     }
