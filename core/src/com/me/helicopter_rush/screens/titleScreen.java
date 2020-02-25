@@ -38,7 +38,18 @@ public class titleScreen extends screen {
 
         playButton playButton = new playButton(playbuttontex, new Vector2(
                 constants.GAME_WIDTH / 2 - playbuttontex.getWidth() / 2,
-                (constants.GAME_HEIGHT / 2 - playbuttontex.getHeight() / 2)), 104, 58, rush);
+                (constants.GAME_HEIGHT / 2 - playbuttontex.getHeight() / 2)), 104, 58);
+        playButton.setTouchable(Touchable.enabled);
+        playButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (aboutHud.isShowing()) aboutHud.hide();
+                else
+                    rush.setScreen(new gameScreen(rush));
+                return true;
+            }
+        });
+
         title title = new title(titletex, new Vector2(
                 constants.GAME_WIDTH/2-600/2, constants.GAME_HEIGHT-160),
                 600, 100);
@@ -50,6 +61,7 @@ public class titleScreen extends screen {
                 return true;
             }
         });
+
         background background = new background(backgroundtex,
                 new Vector2(constants.ORIGIN.x, constants.ORIGIN.y), constants.GAME_WIDTH, constants.GAME_HEIGHT);
         background.setTouchable(Touchable.enabled);
@@ -60,6 +72,7 @@ public class titleScreen extends screen {
                 return true;
             }
         });
+
         aboutActor about = new aboutActor(abouttex, new Vector2(constants.GAME_WIDTH/2 - 130/2,
                 constants.ORIGIN.y + 80), 130, 40);
         about.setTouchable(Touchable.enabled);
@@ -118,19 +131,8 @@ public class titleScreen extends screen {
     }
 
     static class playButton extends actor{
-        playButton(Texture tex, Vector2 pos, int width, int height, final helicopter_rush rush) {
+        playButton(Texture tex, Vector2 pos, int width, int height) {
             super(tex, pos, width, height);
-
-            setTouchable(Touchable.enabled);
-            addListener(new InputListener(){
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    rush.setScreen(
-                            new gameScreen(rush)
-                    );
-                    return true;
-                }
-            });
         }
     }
     static class title extends actor{

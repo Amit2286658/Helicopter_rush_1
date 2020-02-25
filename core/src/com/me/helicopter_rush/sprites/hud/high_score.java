@@ -27,6 +27,7 @@ public class high_score {
     private int high_score = 0;
     private static int current_score = 0;
     private Pixmap bg;
+    private BitmapFont font;
     private TextureRegionDrawable regionDrawable;
     private Preferences preferences;
     private boolean scoreCheckHasRun = false;
@@ -44,7 +45,9 @@ public class high_score {
         table.setBounds(stage.getViewport().getWorldWidth()/2 - constants.TABLE_WIDTH/2,
                 (stage.getViewport().getWorldHeight()/2 - constants.TABLE_HEIGHT/2) - 100,
                 constants.TABLE_WIDTH, constants.TABLE_HEIGHT);
-        style1 = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
+        font = new BitmapFont(Gdx.files.internal("roboto_light_bmf.fnt"));
+        font.getData().setScale(0.3f);
+        style1 = new Label.LabelStyle(font, Color.WHITE);
         highScoreText = new Label("HIGH SCORE", style1);
         highScoreValue = new Label(String.format(Locale.getDefault(), "%03d", high_score), style1);
         currentScoreText = new Label("CURRENT SCORE", style1);
@@ -102,6 +105,7 @@ public class high_score {
         stage.dispose();
         bg.dispose();
         regionDrawable.getRegion().getTexture().dispose();
+        font.dispose();
     }
 
 }

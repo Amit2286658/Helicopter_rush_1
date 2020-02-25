@@ -70,7 +70,8 @@ public class gameScreen extends screen {
         for (int i = 0; i < constants.CEILING_COUNT; i++){
             ceilings.add(new ceiling((i * constants.CEILING_WIDTH) - constants.CAMERA_OFFSET));
         }
-        font = new BitmapFont(Gdx.files.internal("arial.fnt"));
+        /*font = new BitmapFont(Gdx.files.internal("arial.fnt"));*/
+        font = new BitmapFont(Gdx.files.internal("roboto_light_bmf.fnt"));
         font.setColor(Color.BROWN);
 
         explosion = Gdx.audio.newSound(Gdx.files.internal("explode.wav"));
