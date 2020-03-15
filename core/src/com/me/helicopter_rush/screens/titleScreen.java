@@ -1,22 +1,26 @@
 package com.me.helicopter_rush.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.me.helicopter_rush.constants;
 import com.me.helicopter_rush.helicopter_rush;
-import com.me.helicopter_rush.sprites.hud.about;
+import com.me.helicopter_rush.sprites.hud.aboutHud;
 
 public class titleScreen extends screen {
 
-    private Texture backgroundtex, playbuttontex, titletex, abouttex;
+    private Texture backgroundtex, playbuttontex, titletex, abouttex, music_on, music_off, sound_on, sound_off;
     private helicopter_rush rush;
-    Stage uiStage;
-    private about aboutHud;
+    private Stage uiStage;
+    private BitmapFont font;
+
+    private aboutHud hud_1;
 
     public titleScreen(helicopter_rush rush) {
         super(rush.getBatch(), true);
@@ -26,26 +30,32 @@ public class titleScreen extends screen {
     @Override
     public void show() {
         super.show();
-        playbuttontex = new Texture("playbutton.png");
-        backgroundtex = new Texture("bg_forest_edited.png");
+        playbuttontex = new Texture("yellow_button00.png");
+        backgroundtex = new Texture("bg_forest_color_edited.png");
         titletex = new Texture("title.png");
         abouttex = new Texture("about.png");
+        music_on = new Texture("music_on.png");
+        music_off = new Texture("music_off.png");
+        sound_on = new Texture("sound_on.png");
+        sound_off = new Texture("sound_off.png");
 
-        aboutHud = new about(rush.getBatch(), getUiViewPort());
+        font = new BitmapFont(Gdx.files.internal("kenvector_future.fnt"));
+        font.setColor(Color.BROWN);
+        font.getData().setScale(0.6f);
 
-        //getUiCamera().setToOrtho(false, constants.GAME_WIDTH, constants.GAME_HEIGHT);
+        hud_1 = new aboutHud(rush.getBatch());
+
         getUiCamera().position.set(getUiViewPort().getWorldWidth()/2, getUiViewPort().getWorldHeight()/2, 0);
 
         playButton playButton = new playButton(playbuttontex, new Vector2(
                 constants.GAME_WIDTH / 2 - playbuttontex.getWidth() / 2,
-                (constants.GAME_HEIGHT / 2 - playbuttontex.getHeight() / 2)), 104, 58);
+                (constants.GAME_HEIGHT / 2 - playbuttontex.getHeight() / 2)),
+                playbuttontex.getWidth(), playbuttontex.getHeight());//104, 58);
         playButton.setTouchable(Touchable.enabled);
         playButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (aboutHud.isShowing()) aboutHud.hide();
-                else
-                    rush.setScreen(new gameScreen(rush));
+                if (!hud_1.isDrawing()) rush.setScreen(new gameScreen(rush));
                 return true;
             }
         });
@@ -57,7 +67,7 @@ public class titleScreen extends screen {
         title.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (aboutHud.isShowing()) aboutHud.hide();
+                if (hud_1.isDrawing()) hud_1.hide();
                 return true;
             }
         });
@@ -68,7 +78,7 @@ public class titleScreen extends screen {
         background.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (aboutHud.isShowing()) aboutHud.hide();
+                if (hud_1.isDrawing()) hud_1.hide();
                 return true;
             }
         });
@@ -78,18 +88,36 @@ public class titleScreen extends screen {
         about.setTouchable(Touchable.enabled);
         about.addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (aboutHud.isShowing())
-                    aboutHud.hide();
-                else aboutHud.show();
+                if (!hud_1.isDrawing()) hud_1.show();
                 return true;
             }
         });
 
+        final musicButtton musicButtton = new musicButtton(music_on, new Vector2(640, 15), 40,40);
+        musicButtton.setTouchable(Touchable.enabled);
+        musicButtton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                musicButtton.setTexture(music_off);
+                return true;
+            }
+        });
+        final sfxButton sfxButton = new sfxButton(sound_on, new Vector2(700,15), 40, 40);
+        sfxButton.setTouchable(Touchable.enabled);
+        sfxButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                sfxButton.setTexture(sound_off);
+                return true;
+            }
+        });
         this.uiStage = new Stage(getUiViewPort(), rush.getBatch());
         uiStage.addActor(background);
         uiStage.addActor(title);
         uiStage.addActor(playButton);
         uiStage.addActor(about);
+        uiStage.addActor(musicButtton);
+        uiStage.addActor(sfxButton);
 
         Gdx.input.setInputProcessor(uiStage);
     }
@@ -104,8 +132,15 @@ public class titleScreen extends screen {
         batch.setProjectionMatrix(getUiCamera().combined);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         uiStage.draw();
-        aboutHud.draw();
+
+        rush.getBatch().begin();
+        font.draw(rush.getBatch(), "start"
+                , constants.GAME_WIDTH/2-playbuttontex.getWidth()/4 - constants.PLAYBUTTON_XOFFSET
+                , constants.GAME_HEIGHT/2-playbuttontex.getHeight()/2 + constants.PLAYBUTTON_YOFFSET);
+        rush.getBatch().end();
+        hud_1.draw();
     }
 
     @Override
@@ -123,11 +158,12 @@ public class titleScreen extends screen {
     public void dispose() {
         super.dispose();
         uiStage.dispose();
-        aboutHud.dispose();
         playbuttontex.dispose();
         titletex.dispose();
         abouttex.dispose();
         backgroundtex.dispose();
+        font.dispose();
+        hud_1.dispose();
     }
 
     static class playButton extends actor{
@@ -150,6 +186,16 @@ public class titleScreen extends screen {
             super(tex, pos, width, height);
         }
     }
+    static class musicButtton extends actor{
+        musicButtton(Texture tex, Vector2 pos, int width, int height) {
+            super(tex, pos, width, height);
+        }
+    }
+    static class sfxButton extends actor{
+        sfxButton(Texture tex, Vector2 pos, int width, int height) {
+            super(tex, pos, width, height);
+        }
+    }
 
     static abstract class actor extends Actor{
         Texture tex;
@@ -162,6 +208,10 @@ public class titleScreen extends screen {
             this.width = width;
             this.height = height;
             setBounds(this.pos.x, this.pos.y, width, height);
+        }
+
+        public void setTexture(Texture tex){
+            this.tex = tex;
         }
 
         @Override

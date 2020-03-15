@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.me.helicopter_rush.constants;
 
+@Deprecated
 public class about {
 
     private boolean isShowing;

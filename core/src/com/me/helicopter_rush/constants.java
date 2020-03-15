@@ -39,6 +39,8 @@ public class constants {
     public static final String SCORE_PREFERENCE_KEY = "high_score";
     public static final int TABLE_WIDTH = 240;
     public static final int TABLE_HEIGHT = 100;
+    public static final int PLAYBUTTON_XOFFSET = 10;
+    public static final int PLAYBUTTON_YOFFSET = 35;
     private static float time_counter = 0;
     public static float synchronizeCameraPosition;
     public static void accelerateSpeed(float delta){

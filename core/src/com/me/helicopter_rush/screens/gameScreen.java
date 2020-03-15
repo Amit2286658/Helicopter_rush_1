@@ -71,7 +71,7 @@ public class gameScreen extends screen {
             ceilings.add(new ceiling((i * constants.CEILING_WIDTH) - constants.CAMERA_OFFSET));
         }
         /*font = new BitmapFont(Gdx.files.internal("arial.fnt"));*/
-        font = new BitmapFont(Gdx.files.internal("roboto_light_bmf.fnt"));
+        font = new BitmapFont(Gdx.files.internal("kenvector_future_thin.fnt"));
         font.setColor(Color.BROWN);
 
         explosion = Gdx.audio.newSound(Gdx.files.internal("explode.wav"));
@@ -113,6 +113,14 @@ public class gameScreen extends screen {
                 c.update(c.getPosition().x + (constants.CEILING_WIDTH) * constants.CEILING_COUNT);
             }
         }
+
+        if (currentState == gameState.READY_STATE && hastheRocksBeenAdded){
+            for (obstacle obs : rocks){
+                if (obs.getPosition().x < helicop.getPosition().x + constants.VIEWPORT_WIDTH)
+                    obs.update((obs.getPosition().x + (constants.SPACING) * constants.OBSTACLE_COUNT));
+            }
+        }
+
         if (currentState == gameState.PLAYING_STATE) {
             addRocks();
             for (obstacle item : rocks) {
@@ -267,14 +275,9 @@ public class gameScreen extends screen {
             helicop.jump();
         }
         else if (currentState == gameState.READY_STATE){
-            hastheRocksBeenAdded = false;
             helicop.doNotMoveHorizontally();
             currentState = gameState.PLAYING_STATE;
         }else if (currentState == gameState.OVER_STATE) {
-            for (int i = 0; i < rocks.size; i++){
-                rocks.get(i).dispose();
-            }
-            rocks.clear();
             exp.reset();
             helicop.setPosition(new Vector2(helicop.getPosition().x, 120));
             helicop.setVelocity(new Vector2(0, 0));

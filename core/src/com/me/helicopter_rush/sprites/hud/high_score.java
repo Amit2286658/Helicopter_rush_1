@@ -45,9 +45,9 @@ public class high_score {
         table.setBounds(stage.getViewport().getWorldWidth()/2 - constants.TABLE_WIDTH/2,
                 (stage.getViewport().getWorldHeight()/2 - constants.TABLE_HEIGHT/2) - 100,
                 constants.TABLE_WIDTH, constants.TABLE_HEIGHT);
-        font = new BitmapFont(Gdx.files.internal("roboto_light_bmf.fnt"));
+        font = new BitmapFont(Gdx.files.internal("kenvector_future_thin.fnt"));
         font.getData().setScale(0.3f);
-        style1 = new Label.LabelStyle(font, Color.WHITE);
+        style1 = new Label.LabelStyle(font, Color.BROWN);
         highScoreText = new Label("HIGH SCORE", style1);
         highScoreValue = new Label(String.format(Locale.getDefault(), "%03d", high_score), style1);
         currentScoreText = new Label("CURRENT SCORE", style1);
@@ -67,7 +67,7 @@ public class high_score {
         bg = new Pixmap(constants.TABLE_WIDTH, constants.TABLE_HEIGHT, Pixmap.Format.RGB565);
         bg.setColor(Color.BROWN);
         bg.fill();
-        regionDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(bg)));
+        regionDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("high_score_panel.png")));
         this.table.setBackground(regionDrawable);
     }
 
