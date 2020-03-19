@@ -20,7 +20,7 @@ public class aboutHud {
             email = "amitkumar13234353@gmail.com",
             project_description = "find the project here on:",
             project_url = "github.com/Amit2286658/Helicopter_rush_1.git",
-            version = "v1.0";
+            version = "v2.0";
 
     public aboutHud(SpriteBatch batch){
         this.batch = batch;
