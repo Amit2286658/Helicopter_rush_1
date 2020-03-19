@@ -83,7 +83,7 @@ public class high_score {
 
     private void runScoreCheck(int score){
         if (!scoreCheckHasRun){
-            high_score = preferences.getInteger(constants.SCORE_PREFERENCE_KEY);
+            high_score = preferences.getInteger(constants.SCORE_PREFERENCE_KEY, 0);
             current_score = score;
             if (high_score < current_score){
                 preferences.putInteger(constants.SCORE_PREFERENCE_KEY, current_score);

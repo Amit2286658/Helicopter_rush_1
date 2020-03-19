@@ -1,22 +1,15 @@
 package com.me.helicopter_rush;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.me.helicopter_rush.screens.gameScreen;
 import com.me.helicopter_rush.screens.titleScreen;
 
 public class helicopter_rush extends Game {
 	private SpriteBatch batch;
-	private Music gameMusic;
-	
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-		gameMusic.setLooping(true);
-		gameMusic.play();
 
 		setScreen(new titleScreen(this));
 		//img = new Texture("badlogic.jpg");

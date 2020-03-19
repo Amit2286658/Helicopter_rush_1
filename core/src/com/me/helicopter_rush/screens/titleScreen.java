@@ -1,6 +1,8 @@
 package com.me.helicopter_rush.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,6 +21,9 @@ public class titleScreen extends screen {
     private helicopter_rush rush;
     private Stage uiStage;
     private BitmapFont font;
+    private Music gameMusic;
+    private Preferences preferences;
+    private boolean isMusicOn = true, isSoundOn = true;
 
     private aboutHud hud_1;
 
@@ -30,8 +35,18 @@ public class titleScreen extends screen {
     @Override
     public void show() {
         super.show();
+
+        preferences = Gdx.app.getPreferences(constants.PREFERENCE);
+        isMusicOn = preferences.getBoolean(constants.MAIN_MUSIC_PREFERENCE_KEY, true);
+        isSoundOn = preferences.getBoolean(constants.SFX_PREFERENCE_KEY, true);
+
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+        gameMusic.setLooping(true);
+        if (isMusicOn)
+            gameMusic.play();
+
         playbuttontex = new Texture("yellow_button00.png");
-        backgroundtex = new Texture("bg_forest_color_edited.png");
+        backgroundtex = new Texture("game_background_1.png");
         titletex = new Texture("title.png");
         abouttex = new Texture("about.png");
         music_on = new Texture("music_on.png");
@@ -93,21 +108,40 @@ public class titleScreen extends screen {
             }
         });
 
-        final musicButtton musicButtton = new musicButtton(music_on, new Vector2(640, 15), 40,40);
+        final musicButtton musicButtton = new musicButtton(isMusicOn ? music_on : music_off,
+                new Vector2(640, 15), 40,40);
         musicButtton.setTouchable(Touchable.enabled);
         musicButtton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                musicButtton.setTexture(music_off);
+                preferences.putBoolean(constants.MAIN_MUSIC_PREFERENCE_KEY, !isMusicOn);
+                preferences.flush();
+
+                isMusicOn = preferences.getBoolean(constants.MAIN_MUSIC_PREFERENCE_KEY, true);
+
+                musicButtton.setTexture(isMusicOn ? music_on : music_off);
+
+                if (!gameMusic.isPlaying())
+                    gameMusic.play();
+                else if (gameMusic.isPlaying())
+                    gameMusic.stop();
+
                 return true;
             }
         });
-        final sfxButton sfxButton = new sfxButton(sound_on, new Vector2(700,15), 40, 40);
+        final sfxButton sfxButton = new sfxButton(isSoundOn ? sound_on : sound_off,
+                new Vector2(700,15), 40, 40);
         sfxButton.setTouchable(Touchable.enabled);
         sfxButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                sfxButton.setTexture(sound_off);
+                preferences.putBoolean(constants.SFX_PREFERENCE_KEY, !isSoundOn);
+                preferences.flush();
+
+                isSoundOn = preferences.getBoolean(constants.SFX_PREFERENCE_KEY, true);
+
+                sfxButton.setTexture(isSoundOn ? sound_on : sound_off);
+
                 return true;
             }
         });

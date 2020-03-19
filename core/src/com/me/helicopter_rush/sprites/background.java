@@ -10,7 +10,7 @@ public class background {
     private Vector2 position;
 
     public background(float x){
-        this.bg = new Texture("bg_forest_color_edited.png");
+        this.bg = new Texture("game_background_1.png");
         this.position = new Vector2(x, constants.ORIGIN.y);
     }
 

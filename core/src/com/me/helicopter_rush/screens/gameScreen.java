@@ -1,6 +1,7 @@
 package com.me.helicopter_rush.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -31,6 +32,8 @@ public class gameScreen extends screen {
     private Texture gameover, getready;
     private BitmapFont font;
     private static int score = 0;
+    private boolean isSoundOn = true;
+    private Preferences preferences;
 
     private OrthographicCamera newCam;
     private FitViewport newPort;
@@ -75,6 +78,8 @@ public class gameScreen extends screen {
         font.setColor(Color.BROWN);
 
         explosion = Gdx.audio.newSound(Gdx.files.internal("explode.wav"));
+        preferences = Gdx.app.getPreferences(constants.PREFERENCE);
+        isSoundOn = preferences.getBoolean(constants.SFX_PREFERENCE_KEY, true);
 
         //getGameCamera().setToOrtho(false, constants.VIEWPORT_WIDTH/2, constants.VIEWPORT_HEIGHT/2);
         getGameCamera().position.set(getGameViewPort().getWorldWidth()/2, getGameViewPort().getWorldHeight()/2, 0);
@@ -116,8 +121,10 @@ public class gameScreen extends screen {
 
         if (currentState == gameState.READY_STATE && hastheRocksBeenAdded){
             for (obstacle obs : rocks){
-                if (obs.getPosition().x < helicop.getPosition().x + constants.VIEWPORT_WIDTH)
+                if (obs.getPosition().x < helicop.getPosition().x + constants.VIEWPORT_WIDTH) {
                     obs.update((obs.getPosition().x + (constants.SPACING) * constants.OBSTACLE_COUNT));
+                    obs.setCounted(false);
+                }
             }
         }
 
@@ -133,16 +140,21 @@ public class gameScreen extends screen {
                     score++;
                     item.setCounted(true);
                 }
-                if (item.collision(helicop.getBounds())) {
-                    explosion.play();
-                    currentState = gameState.OVER_STATE;
+                if (helicop.getPosition().x + constants.HELICOPTER_WIDTH > item.getPosition().x
+                        && helicop.getPosition().x < item.getPosition().x + constants.OBSTACLE_WIDTH) {
+                    if (item.collision(helicop.getBounds())) {
+                        if (isSoundOn)
+                            explosion.play();
+                        currentState = gameState.OVER_STATE;
+                    }
                 }
             }
         }
 
         if (currentState != gameState.OVER_STATE) {
             if (helicop.groundCollision()) {
-                explosion.play();
+                if (isSoundOn)
+                    explosion.play();
                 currentState = gameState.OVER_STATE;
             }
         }
@@ -156,7 +168,6 @@ public class gameScreen extends screen {
         getGameCamera().update();
         newCam.position.x = getGameCamera().position.x/6 + constants.CAMERA_OFFSET * 2;
         newCam.update();
-
     }
 
     @Override
@@ -177,7 +188,17 @@ public class gameScreen extends screen {
         for (int i = 0; i < rocks.size; i++){
             batch.draw(rocks.get(i).getTexture(), rocks.get(i).getPosition().x, rocks.get(i).getPosition().y,
                     constants.OBSTACLE_WIDTH, constants.OBSTACLE_HEIGHT);
-            //rocks.get(i).drawShape(getGameCamera(), shapeRenderer, batch);
+            /*if (helicop.getPosition().x + constants.HELICOPTER_WIDTH > rocks.get(i).getPosition().x
+                    && helicop.getPosition().x < rocks.get(i).getPosition().x + constants.OBSTACLE_WIDTH) {
+                rocks.get(i).drawCollisionDebugLines(getGameCamera(), shapeRenderer, batch);
+            }*/
+        }
+        if (currentState  != gameState.OVER_STATE) {
+            batch.draw(helicop.getTexture(), helicop.getPosition().x, helicop.getPosition().y,
+                    constants.HELICOPTER_WIDTH, constants.HELICOPTER_HEIGHT);
+        }else {
+            batch.draw(exp.getTexture(), exp.getPosition().x, exp.getPosition().y,
+                    constants.HELICOPTER_WIDTH, constants.HELICOPTER_HEIGHT);
         }
         for (int i = 0; i < grounds.size; i++){
             batch.draw(grounds.get(i).getTexture(), grounds.get(i).getPosition().x, grounds.get(i).getPosition().y,
@@ -187,14 +208,21 @@ public class gameScreen extends screen {
             batch.draw(ceilings.get(i).getTexture(), ceilings.get(i).getPosition().x, ceilings.get(i).getPosition().y,
                     constants.CEILING_WIDTH, constants.CEILING_HEIGHT);
         }
-        if (currentState  != gameState.OVER_STATE) {
-            batch.draw(helicop.getTexture(), helicop.getPosition().x, helicop.getPosition().y,
-                    constants.HELICOPTER_WIDTH, constants.HELICOPTER_HEIGHT);
-            //helicop.drawShape(getGameCamera(), shapeRenderer, batch);
-        }else {
-            batch.draw(exp.getTexture(), exp.getPosition().x, exp.getPosition().y,
-                    constants.HELICOPTER_WIDTH, constants.HELICOPTER_HEIGHT);
+/////////////////////////////////////////////////
+        /*for (int i = 0; i < 3; i ++){
+            grounds.get(i).drawGroundDebugLines(getGameCamera(), shapeRenderer, batch);
+            ceilings.get(i).drawCeilingDebugLines(getGameCamera(), shapeRenderer, batch);
+        }*/
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+        /*for (int i = 0; i < rocks.size; i++){
+            rocks.get(i).drawShape(getGameCamera(), shapeRenderer, batch);
         }
+        if (currentState  != gameState.OVER_STATE) {
+            helicop.drawShape(getGameCamera(), shapeRenderer, batch);
+        }*/
+/////////////////////////////////////////////////
         batch.end();
 
         batch.setProjectionMatrix(getUiCamera().combined);
@@ -260,6 +288,7 @@ public class gameScreen extends screen {
         rocks.clear();
         grounds.clear();
         ceilings.clear();
+        backgrounds.clear();
         if (currentState == gameState.OVER_STATE){
             exp.dispose();
             scoreCounter.dispose();

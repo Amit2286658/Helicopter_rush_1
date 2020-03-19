@@ -17,7 +17,7 @@ public class helicopter {
     //private Texture texture;
     private Animation<Texture> helicopters;
     private float delta;
-    private Rectangle bounds;
+    private Rectangle bounds, bounds2;
     private boolean moveHorizontalOnly = false;
 
     public helicopter(int x, int y){
@@ -32,10 +32,16 @@ public class helicopter {
          );
          helicopters.setPlayMode(Animation.PlayMode.LOOP);
          bounds = new Rectangle(
-                 this.position.x + 2,
+                 this.position.x + 2 + constants.HELICOPTER_WIDTH/2 - 4,
                  this.position.y + 2,
-                 constants.HELICOPTER_WIDTH - 4,
-                 constants.HELICOPTER_HEIGHT - 4
+                 constants.HELICOPTER_WIDTH/2 - 4,
+                 constants.HELICOPTER_HEIGHT * 7/8 - 4
+         );
+         bounds2 = new Rectangle(
+                 this.position.x + 2,
+                 this.position.y + constants.HELICOPTER_HEIGHT/2 - 4,
+                 constants.HELICOPTER_WIDTH - 6,
+                 constants.HELICOPTER_HEIGHT/4
          );
     }
 
@@ -70,6 +76,7 @@ public class helicopter {
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(Color.BLACK);
         renderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+        renderer.rect(bounds2.x, bounds2.y, bounds2.width, bounds2.height);
         renderer.end();
         batch.begin();
     }
@@ -99,7 +106,8 @@ public class helicopter {
         if (position.y < 0)
             position.y = 0;
 
-        bounds.setPosition(this.position.x + 2, this.position.y + 2);
+        bounds.setPosition(this.position.x + 2 + constants.HELICOPTER_WIDTH/2 - 4, this.position.y + 2);
+        bounds2.setPosition(this.position.x + 2, this.position.y + constants.HELICOPTER_HEIGHT/2 - 4);
     }
 
     public void dispose(){
@@ -108,13 +116,14 @@ public class helicopter {
         }
     }
 
-    public Rectangle getBounds() {
-        return bounds;
+    public Rectangle[] getBounds() {
+        return new Rectangle[]{bounds, bounds2};
     }
 
     public boolean groundCollision(){
         return this.position.y <= constants.ORIGIN.y + constants.GROUND_COLLISION_OFFSET ||
-                this.position.y >= constants.VIEWPORT_HEIGHT - constants.GROUND_HEIGHT;
+                this.position.y + (constants.HELICOPTER_HEIGHT - 4) >=
+                        constants.VIEWPORT_HEIGHT - constants.GROUND_COLLISION_OFFSET;
         //return false;
     }
     public Animation<Texture> getHelicopters() {
