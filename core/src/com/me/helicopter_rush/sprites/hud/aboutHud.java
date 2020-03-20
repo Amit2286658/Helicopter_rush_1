@@ -20,7 +20,7 @@ public class aboutHud {
             email = "amitkumar13234353@gmail.com",
             project_description = "find the project here on:",
             project_url = "github.com/Amit2286658/Helicopter_rush_1.git",
-            version = "v2.0";
+            version = "v3.0";
 
     public aboutHud(SpriteBatch batch){
         this.batch = batch;
@@ -81,6 +81,7 @@ public class aboutHud {
         backgroundGroup.dispose();
         about.dispose();
         font.dispose();
+        boldFont.dispose();
         isDrawing = false;
     }
 
